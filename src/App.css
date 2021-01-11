@@ -1,0 +1,64 @@
+:root {
+    --input-border: #8b8a8b;
+    --input-focus-h: 245;
+    --input-focus-s: 100%;
+    --input-focus-l: 42%;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+.input,
+button {
+    font-size: 16px;
+    font-size: max(16px, 1rem);
+    font-family: inherit;
+    padding: 0.25rem 0.25rem;
+    background-color: #fff;
+    border: 2px solid var(--input-border);
+    border-radius: 4px;
+    display: block;
+    transition: 180ms box-shadow ease-in-out;
+}
+
+button {
+    margin: 5px 0px;
+}
+
+.input:not(textarea) {
+    line-height: 1;
+    height: 2.5rem;
+}
+
+textarea.input {
+    resize: none;
+}
+
+button:hover {
+    border-color: hsl(
+        var(--input-focus-h),
+        var(--input-focus-s),
+        var(--input-focus-l)
+    );
+
+    cursor: pointer;
+}
+
+.input:focus {
+    border-color: hsl(
+        var(--input-focus-h),
+        var(--input-focus-s),
+        var(--input-focus-l)
+    );
+
+    box-shadow: 0 0 0 3px
+        hsl(
+            var(--input-focus-h),
+            var(--input-focus-s),
+            cals(var(--input-focus-l) + 40%)
+        );
+    outline: 3px solid transparent;
+}
