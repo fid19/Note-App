@@ -5,21 +5,23 @@ const testNotes = [
     {
         id: 0,
         text: "This is a test note",
+        backgroundColor: "red",
         isCompleted: true,
     },
     {
         id: 1,
         text: "This is my second test note",
+        backgroundColor: "blue",
         isCompleted: true,
     },
 ];
 
 //This is a Component in ReactJs
-const Note = ({ text, isCompleted, id }) => {
+const Note = ({ text, isCompleted, id, backgroundColor }) => {
     const isDone = isCompleted ? "Yes" : "No";
 
     return (
-        <p className="note">
+        <p className="note" style={{backgroundColor}}>
             {text} isCompleted: {isDone} id: {id}
         </p>
     );
@@ -35,6 +37,9 @@ function App() {
     //This useState is responsible for getting the id of the note and re-rendering the new update
     const [textUpdate, setTextUpdate] = useState("");
 
+    //This useState is responsible for user choosing background color
+    const [color, setColor] = useState("");
+
     const handleChange = (e) => {
         setText(e.target.value);
     };
@@ -44,6 +49,7 @@ function App() {
             id: notes.length,
             isCompleted: true,
             text,
+            backgroundColor: color,
         };
 
         setNote([...notes, newNote]);
@@ -51,6 +57,10 @@ function App() {
 
     const handleChangeUpdate = (e) => {
         setTextUpdate(e.target.value);
+    };
+
+    const handleColor = (e) => {
+        setColor(e.target.value);
     };
 
     // Handles The Updating Of The Note Once An id is Submitted
@@ -61,6 +71,7 @@ function App() {
             id: parseInt(textUpdate),
             isCompleted: true,
             text: text,
+            backgroundColor: color,
         };
 
         const updateNote = (noteEdit) => {
@@ -80,21 +91,21 @@ function App() {
     };
 
     const handleNoteDelete = () => {
-      let updatedList;
+        let updatedList;
 
-      const idRemove = parseInt(textUpdate);
+        const idRemove = parseInt(textUpdate);
 
-      const deleteNote = (idToRemove) => {
-        updatedList = notes.filter((note) => note.id !== idToRemove);
-      }
+        const deleteNote = (idToRemove) => {
+            updatedList = notes.filter((note) => note.id !== idToRemove);
+        };
 
-      deleteNote(idRemove);
-      setNote(updatedList);
-    }
+        deleteNote(idRemove);
+        setNote(updatedList);
+    };
 
     return (
         <div className="App">
-            <div>
+            <div className="center">
                 <label htmlFor="idNumber">Id</label>
                 <input
                     className="input"
@@ -104,7 +115,7 @@ function App() {
                     onChange={handleChangeUpdate}
                 />
             </div>
-            <div>
+            <div className="center">
                 <label htmlFor="note">Note</label>
                 <textarea
                     className="input"
@@ -118,11 +129,24 @@ function App() {
                 <button type="submit" onClick={handleAddnote}>
                     Add Note
                 </button>
-                <button type="submit" onClick={handleNoteDelete}>Delete Note</button>
+                <button type="submit" onClick={handleNoteDelete}>
+                    Delete Note
+                </button>
                 <button type="submit" onClick={handleUpdateNote}>
                     Edit Note
                 </button>
             </div>
+            {/* <div>
+                <select onChange={handleColor}>
+                    <option value={color}>red</option>
+                    <option value={color}>green</option>
+                    <option selected value={color}>
+                        yellow
+                    </option>
+                    <option value={color}>blue</option>
+                    {console.log(color)}
+                </select>
+            </div> */}
 
             {notes.map(({ id, ...note }) => (
                 <Note key={id} id={id} {...note} />
