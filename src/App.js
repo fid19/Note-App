@@ -3,33 +3,47 @@ import "./App.css";
 
 const testNotes = [
     {
-        id: 0,
+        id: 1,
         text: "This is a test note",
         backgroundColor: "red",
         isCompleted: true,
     },
     {
-        id: 1,
+        id: 2,
         text: "This is my second test note",
         backgroundColor: "blue",
         isCompleted: true,
     },
 ];
 
+
+
+
 //This is a Component in ReactJs
-const Note = ({ text, isCompleted, id, backgroundColor }) => {
+const Note = ({ text, isCompleted, id, backgroundColor, onNoteDelete }) => {
+    
     const isDone = isCompleted ? "Yes" : "No";
 
     return (
-        <p className="note" style={{backgroundColor}}>
-            {text} isCompleted: {isDone} id: {id}
-        </p>
+        
+            <div className="card">
+                <p className="note" style={{ backgroundColor }}>
+                    {text} isCompleted: {isDone} id: {id}
+                </p>
+                <button type="submit" onClick={()=> onNoteDelete(id)}>
+                    Delete Note
+                </button>
+            </div>
     );
 };
 
 function App() {
+
+
     //This useState is responsible for rendering testNotes
     const [notes, setNote] = useState(testNotes);
+
+
 
     //This useState is responsible for adding notes
     const [text, setText] = useState("");
@@ -40,19 +54,33 @@ function App() {
     //This useState is responsible for user choosing background color
     const [color, setColor] = useState("");
 
+    const handleNoteDelete = (removeId) => {
+        let updatedList;
+
+        // const idRemove = parseInt(textUpdate);
+
+        const deleteNote = () => {
+            updatedList = notes.filter((note) => note.id !== removeId).map((note, index) => ({...note, id: index+1}))
+        };
+
+        deleteNote();
+        setNote(updatedList);
+    };
+
     const handleChange = (e) => {
         setText(e.target.value);
     };
 
     const handleAddnote = () => {
         const newNote = {
-            id: notes.length,
+            id: notes.length+1,
             isCompleted: true,
             text,
             backgroundColor: color,
         };
 
         setNote([...notes, newNote]);
+        setText("");
     };
 
     const handleChangeUpdate = (e) => {
@@ -61,8 +89,9 @@ function App() {
 
     const handleColor = (e) => {
         setColor(e.target.value);
+        console.log(e.target.value);
     };
-
+    
     // Handles The Updating Of The Note Once An id is Submitted
     const handleUpdateNote = () => {
         let updatedList;
@@ -90,22 +119,11 @@ function App() {
         setNote(updatedList);
     };
 
-    const handleNoteDelete = () => {
-        let updatedList;
-
-        const idRemove = parseInt(textUpdate);
-
-        const deleteNote = (idToRemove) => {
-            updatedList = notes.filter((note) => note.id !== idToRemove);
-        };
-
-        deleteNote(idRemove);
-        setNote(updatedList);
-    };
-
+    
+    console.log(notes);
     return (
         <div className="App">
-            <div className="center">
+            {/* <div className="center">
                 <label htmlFor="idNumber">Id</label>
                 <input
                     className="input"
@@ -114,7 +132,7 @@ function App() {
                     value={textUpdate}
                     onChange={handleChangeUpdate}
                 />
-            </div>
+            </div> */}
             <div className="center">
                 <label htmlFor="note">Note</label>
                 <textarea
@@ -129,28 +147,29 @@ function App() {
                 <button type="submit" onClick={handleAddnote}>
                     Add Note
                 </button>
-                <button type="submit" onClick={handleNoteDelete}>
+                {/* <button type="submit" onClick={handleNoteDelete}>
                     Delete Note
-                </button>
+                </button> */}
                 <button type="submit" onClick={handleUpdateNote}>
                     Edit Note
                 </button>
             </div>
-            {/* <div>
-                <select onChange={handleColor}>
-                    <option value={color}>red</option>
-                    <option value={color}>green</option>
-                    <option selected value={color}>
+            <div>
+                <select onChange={handleColor} value={color}>
+                    <option value="red">red</option>
+                    <option value="green">green</option>
+                    <option selected value="yellow">
                         yellow
                     </option>
-                    <option value={color}>blue</option>
-                    {console.log(color)}
+                    <option value="blue">blue</option>
+                    {/* {console.log(color)} */}
                 </select>
-            </div> */}
-
-            {notes.map(({ id, ...note }) => (
-                <Note key={id} id={id} {...note} />
-            ))}
+            </div>
+            <div className="cardContainer">
+                {notes.map(({ id, ...note }) => (
+                    <Note key={id} id={id} onNoteDelete={handleNoteDelete} {...note} />
+                ))}
+            </div>
         </div>
     );
 }

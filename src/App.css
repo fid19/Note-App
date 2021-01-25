@@ -5,6 +5,11 @@
     --input-focus-l: 42%;
 }
 
+* {
+    outline: 1px solid red;  
+  }
+  
+
 *,
 *::before,
 *::after {
@@ -67,20 +72,30 @@ button:hover {
     margin: auto;
     width: 60%;
     padding: 10px;
-    border: 5px solid #fff000;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    border: 1px solid #636260;
+    background-color: #e5e2e5;
+    border-radius: 10px;
 }
 
 .input {
     background-color: rgb(224, 216, 216);
 }
 
-.note{
-    background-color: red;
-    padding: 4px;
-    border-radius:4px;
-}
-
 textarea {
     width: 100%;
     height: 100px;
+}
+
+.cardContainer {
+    display: flex;
+    /* width: 100vw; */
+    flex-wrap: wrap;
+}
+
+.card{
+    /* margin-right: 1rem; */
+    padding: 1rem;
+    flex-basis: 33.333333%;
 }
