@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import "./App.css";
 import Modal from "react-modal";
+import NoteComponent from "./components/NoteComp";
+import DeleteComponent from "./components/DeleteComp";
+import ModalComponentS from "./components/ModalComp";
 
 Modal.setAppElement("#root");
 
@@ -20,54 +23,22 @@ const testNotes = [
 ];
 
 //This is a Component in ReactJs
-const Note = ({ text, isCompleted, id, backgroundColor, onNoteDelete }) => {
-    const isDone = isCompleted ? "Yes" : "No";
 
-    return (
-        <div className="card" style={{ backgroundColor }}>
-            <p className="note">
-                {text} isCompleted: {isDone} id: {id}
-            </p>
-            <button type="submit" onClick={() => onNoteDelete(id)}>
-                Delete Note
-            </button>
-        </div>
-    );
-};
+<NoteComponent />
+
 
 function App() {
     const [isOpen, setIsOpen] = useState(false);
+    const [notes, setNote] = useState(testNotes);
+    const [text, setText] = useState("");
+    const [textUpdate, setTextUpdate] = useState("");
+    const [color, setColor] = useState("");
 
     function toggleModal() {
         setIsOpen(!isOpen);
     }
 
-    //This useState is responsible for rendering testNotes
-    const [notes, setNote] = useState(testNotes);
-
-    //This useState is responsible for adding notes
-    const [text, setText] = useState("");
-
-    //This useState is responsible for getting the id of the note and re-rendering the new update
-    const [textUpdate, setTextUpdate] = useState("");
-
-    //This useState is responsible for user choosing background color
-    const [color, setColor] = useState("");
-
-    const handleNoteDelete = (removeId) => {
-        let updatedList;
-
-        // const idRemove = parseInt(textUpdate);
-
-        const deleteNote = () => {
-            updatedList = notes
-                .filter((note) => note.id !== removeId)
-                .map((note, index) => ({ ...note, id: index + 1 }));
-        };
-
-        deleteNote();
-        setNote(updatedList);
-    };
+    <DeleteComponent />
 
     const handleChange = (e) => {
         setText(e.target.value);
@@ -83,10 +54,6 @@ function App() {
 
         setNote([...notes, newNote]);
         setText("");
-    };
-
-    const handleChangeUpdate = (e) => {
-        setTextUpdate(e.target.value);
     };
 
     const handleColor = (e) => {
@@ -126,65 +93,15 @@ function App() {
         <div className="App">
 
             <button onClick={toggleModal}>New Note</button>
-            <Modal
-                isOpen = {isOpen}
-                onRequestClose={toggleModal}
-                contentLabel = "Note App Dialog"
-                className = "modaldial"
-                overlayClassName = "overlaydial"
-                closeTimeoutMS = {500}
-            >
-                {/* <div className="center">
-                <label htmlFor="idNumber">Id</label>
-                <input
-                    className="input"
-                    id="idNumber"
-                    type="number"
-                    value={textUpdate}
-                    onChange={handleChangeUpdate}
-                />
-            </div> */}
-                <div className="center">
-                    <label htmlFor="note">Note</label>
-                    <textarea
-                        className="input"
-                        id="textarea"
-                        type="text"
-                        value={text}
-                        onChange={handleChange}
-                    ></textarea>
-                </div>
-                <div>
-                    <button type="submit" onClick={handleAddnote}>
-                        Add Note
-                    </button>
-                    {/* <button type="submit" onClick={handleNoteDelete}>
-                    Delete Note
-                </button> */}
-                    <button type="submit" onClick={handleUpdateNote}>
-                        Edit Note
-                    </button>
-                </div>
-                <div>
-                    <select onChange={handleColor} value={color}>
-                        <option value="red">red</option>
-                        <option value="green">green</option>
-                        <option value="yellow">
-                            yellow
-                        </option>
-                        <option value="blue">blue</option>
-                        {/* {console.log(color)} */}
-                    </select>
-                </div>
-                <button onClick={toggleModal}>Close</button>
-            </Modal>
+            <ModalComponentS />
+            
 
             <div className="cardContainer">
                 {notes.map(({ id, ...note }) => (
-                    <Note
+                    <NoteComponent
                         key={id}
                         id={id}
-                        onNoteDelete={handleNoteDelete}
+                        onNoteDelete={DeleteComponent}
                         {...note}
                     />
                 ))}
