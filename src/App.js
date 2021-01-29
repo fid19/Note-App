@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import "./App.css";
+import Modal from "react-modal";
+
+Modal.setAppElement("#root");
 
 const testNotes = [
     {
@@ -16,34 +19,31 @@ const testNotes = [
     },
 ];
 
-
-
-
 //This is a Component in ReactJs
 const Note = ({ text, isCompleted, id, backgroundColor, onNoteDelete }) => {
-    
     const isDone = isCompleted ? "Yes" : "No";
 
     return (
-        
-            <div className="card">
-                <p className="note" style={{ backgroundColor }}>
-                    {text} isCompleted: {isDone} id: {id}
-                </p>
-                <button type="submit" onClick={()=> onNoteDelete(id)}>
-                    Delete Note
-                </button>
-            </div>
+        <div className="card" style={{ backgroundColor }}>
+            <p className="note" >
+                {text} isCompleted: {isDone} id: {id}
+            </p>
+            <button type="submit" onClick={() => onNoteDelete(id)}>
+                Delete Note
+            </button>
+        </div>
     );
 };
 
 function App() {
+    const [isOpen, setIsOpen] = useState(false);
 
+    function toggleModal() {
+        setIsOpen(!isOpen);
+    }
 
     //This useState is responsible for rendering testNotes
     const [notes, setNote] = useState(testNotes);
-
-
 
     //This useState is responsible for adding notes
     const [text, setText] = useState("");
@@ -60,7 +60,9 @@ function App() {
         // const idRemove = parseInt(textUpdate);
 
         const deleteNote = () => {
-            updatedList = notes.filter((note) => note.id !== removeId).map((note, index) => ({...note, id: index+1}))
+            updatedList = notes
+                .filter((note) => note.id !== removeId)
+                .map((note, index) => ({ ...note, id: index + 1 }));
         };
 
         deleteNote();
@@ -73,7 +75,7 @@ function App() {
 
     const handleAddnote = () => {
         const newNote = {
-            id: notes.length+1,
+            id: notes.length + 1,
             isCompleted: true,
             text,
             backgroundColor: color,
@@ -89,9 +91,8 @@ function App() {
 
     const handleColor = (e) => {
         setColor(e.target.value);
-        console.log(e.target.value);
     };
-    
+
     // Handles The Updating Of The Note Once An id is Submitted
     const handleUpdateNote = () => {
         let updatedList;
@@ -119,11 +120,18 @@ function App() {
         setNote(updatedList);
     };
 
-    
-    console.log(notes);
     return (
         <div className="App">
-            {/* <div className="center">
+            <button onClick={toggleModal}>Note Add</button>
+            <Modal
+                isOpen={isOpen}
+                onRequestClose={toggleModal}
+                contentLabel="My Dialog"
+                className="modaldial"
+                overlayClassName="overlaydial"
+                closeTimeoutMS={500}
+            >
+                {/* <div className="center">
                 <label htmlFor="idNumber">Id</label>
                 <input
                     className="input"
@@ -133,41 +141,47 @@ function App() {
                     onChange={handleChangeUpdate}
                 />
             </div> */}
-            <div className="center">
-                <label htmlFor="note">Note</label>
-                <textarea
-                    className="input"
-                    id="textarea"
-                    type="text"
-                    value={text}
-                    onChange={handleChange}
-                ></textarea>
-            </div>
-            <div>
-                <button type="submit" onClick={handleAddnote}>
-                    Add Note
-                </button>
-                {/* <button type="submit" onClick={handleNoteDelete}>
+                <div className="center">
+                    <label htmlFor="note">Note</label>
+                    <textarea
+                        className="input"
+                        id="textarea"
+                        type="text"
+                        value={text}
+                        onChange={handleChange}
+                    ></textarea>
+                </div>
+                <div>
+                    <button type="submit" onClick={handleAddnote}>
+                        Add Note
+                    </button>
+                    {/* <button type="submit" onClick={handleNoteDelete}>
                     Delete Note
                 </button> */}
-                <button type="submit" onClick={handleUpdateNote}>
-                    Edit Note
-                </button>
-            </div>
-            <div>
-                <select onChange={handleColor} value={color}>
-                    <option value="red">red</option>
-                    <option value="green">green</option>
-                    <option selected value="yellow">
-                        yellow
-                    </option>
-                    <option value="blue">blue</option>
-                    {/* {console.log(color)} */}
-                </select>
-            </div>
+                    <button type="submit" onClick={handleUpdateNote}>
+                        Edit Note
+                    </button>
+                </div>
+                <div>
+                    <select onChange={handleColor} value={color}>
+                        <option value="red">red</option>
+                        <option value="green">green</option>
+                        <option selected value="yellow">
+                            yellow
+                        </option>
+                        <option value="blue">blue</option>
+                    </select>
+                </div>
+                <button onClick={toggleModal}>Close Note</button>
+            </Modal>
             <div className="cardContainer">
                 {notes.map(({ id, ...note }) => (
-                    <Note key={id} id={id} onNoteDelete={handleNoteDelete} {...note} />
+                    <Note
+                        key={id}
+                        id={id}
+                        onNoteDelete={handleNoteDelete}
+                        {...note}
+                    />
                 ))}
             </div>
         </div>
