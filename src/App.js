@@ -25,7 +25,7 @@ const Note = ({ text, isCompleted, id, backgroundColor, onNoteDelete }) => {
 
     return (
         <div className="card" style={{ backgroundColor }}>
-            <p className="note" >
+            <p className="note">
                 {text} isCompleted: {isDone} id: {id}
             </p>
             <button type="submit" onClick={() => onNoteDelete(id)}>
@@ -91,6 +91,7 @@ function App() {
 
     const handleColor = (e) => {
         setColor(e.target.value);
+        console.log(e.target.value);
     };
 
     // Handles The Updating Of The Note Once An id is Submitted
@@ -120,16 +121,18 @@ function App() {
         setNote(updatedList);
     };
 
+    console.log(notes);
     return (
         <div className="App">
-            <button onClick={toggleModal}>Note Add</button>
+
+            <button onClick={toggleModal}>New Note</button>
             <Modal
-                isOpen={isOpen}
+                isOpen = {isOpen}
                 onRequestClose={toggleModal}
-                contentLabel="My Dialog"
-                className="modaldial"
-                overlayClassName="overlaydial"
-                closeTimeoutMS={500}
+                contentLabel = "Note App Dialog"
+                className = "modaldial"
+                overlayClassName = "overlaydial"
+                closeTimeoutMS = {500}
             >
                 {/* <div className="center">
                 <label htmlFor="idNumber">Id</label>
@@ -166,14 +169,16 @@ function App() {
                     <select onChange={handleColor} value={color}>
                         <option value="red">red</option>
                         <option value="green">green</option>
-                        <option selected value="yellow">
+                        <option value="yellow">
                             yellow
                         </option>
                         <option value="blue">blue</option>
+                        {/* {console.log(color)} */}
                     </select>
                 </div>
-                <button onClick={toggleModal}>Close Note</button>
+                <button onClick={toggleModal}>Close</button>
             </Modal>
+
             <div className="cardContainer">
                 {notes.map(({ id, ...note }) => (
                     <Note
