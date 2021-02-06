@@ -6,10 +6,12 @@
 }
 
 * {
-    outline: 1px solid red;  
-  }
-  
+    /* outline: 1px solid red;   */
+}
 
+body {
+    background-color: #e6f7ff;
+}
 *,
 *::before,
 *::after {
@@ -94,22 +96,21 @@ textarea {
     flex-wrap: wrap;
 }
 
-.card{
+.card {
     /* margin-right: 1rem; */
-    
+
     padding: 1rem;
     flex-basis: 33.333333%;
-    opacity: 66%;
-    transition: opacity .2s;
-    transition: all .2s ease-in-out;
+    opacity: 70%;
+    transition: opacity 0.2s;
+    transition: all 0.2s ease-in-out;
     margin-bottom: 10px;
 }
 
-.card:hover{
+.card:hover {
     opacity: 100%;
-    transition: opacity .5s;
+    transition: opacity 0.5s;
     transform: scale(1.04);
-    
 }
 
 .modaldial {
@@ -123,10 +124,10 @@ textarea {
     overflow: auto;
     border-radius: 4px;
     outline: none;
-    padding: 20px
+    padding: 20px;
 }
 
-.overlaydial{
+.overlaydial {
     position: fixed;
     top: 0;
     left: 0;
@@ -140,10 +141,23 @@ textarea {
     transition: opacity 500ms ease-in-out;
 }
 
-.ReactModal__Overlay--after-open{
+.ReactModal__Overlay--after-open {
     opacity: 1;
 }
 
 .ReactModal__Overlay--before-close {
     opacity: 0;
+}
+.addnote:hover {
+    display: inline-block;
+    animation: rotation 0.25s linear;
+}
+
+@keyframes rotation {
+    50% {
+        transform: rotate(90deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
 }

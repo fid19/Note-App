@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./App.css";
 import Modal from "react-modal";
+import {PlusSquareOutlined, DeleteOutlined, EditOutlined} from '@ant-design/icons';
 
 Modal.setAppElement("#root");
 
@@ -8,7 +9,7 @@ const testNotes = [
     {
         id: 1,
         text: "This is a test note",
-        backgroundColor: "red",
+        backgroundColor: "#ff4d4f",
         isCompleted: true,
     },
     {
@@ -20,17 +21,20 @@ const testNotes = [
 ];
 
 //This is a Component in ReactJs
-const Note = ({ text, isCompleted, id, backgroundColor, onNoteDelete }) => {
+const Note = ({ text, isCompleted, id, backgroundColor, onNoteDelete, onNoteUpdate }) => {
     const isDone = isCompleted ? "Yes" : "No";
 
     return (
-        <div className="card" style={{ backgroundColor }}>
+        <div className="card" style= {{ backgroundColor }}>
+            <button type="submit" onClick={() => onNoteDelete(id)}>
+                <DeleteOutlined  className='icondelete'/>
+            </button>
+            <button type="submit" onClick={() => onNoteUpdate(id)}>
+                <EditOutlined />
+            </button>
             <p className="note">
                 {text} isCompleted: {isDone} id: {id}
             </p>
-            <button type="submit" onClick={() => onNoteDelete(id)}>
-                Delete Note
-            </button>
         </div>
     );
 };
@@ -91,7 +95,6 @@ function App() {
 
     const handleColor = (e) => {
         setColor(e.target.value);
-        console.log(e.target.value);
     };
 
     // Handles The Updating Of The Note Once An id is Submitted
@@ -121,11 +124,10 @@ function App() {
         setNote(updatedList);
     };
 
-    console.log(notes);
     return (
         <div className="App">
 
-            <button onClick={toggleModal}>New Note</button>
+            <button onClick={toggleModal} className="addnote"><PlusSquareOutlined /></button>
             <Modal
                 isOpen = {isOpen}
                 onRequestClose={toggleModal}
@@ -185,6 +187,7 @@ function App() {
                         key={id}
                         id={id}
                         onNoteDelete={handleNoteDelete}
+                        onNoteUpdate={handleUpdateNote}
                         {...note}
                     />
                 ))}
