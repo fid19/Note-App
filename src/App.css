@@ -10,7 +10,7 @@
 }
 
 body {
-    background-color: #e6f7ff;
+    background-color: gainsboro;
 }
 *,
 *::before,
@@ -42,6 +42,9 @@ button {
 
 textarea.input {
     resize: none;
+}
+textarea {
+    width: 50%;
 }
 
 button:hover {
@@ -77,10 +80,16 @@ button:hover {
     margin-top: 50px;
     margin-bottom: 50px;
     border: 1px solid #636260;
-    background-color: #e5e2e5;
+    background-color: tan;
     border-radius: 10px;
 }
 
+.header {
+    text-align: center;
+    background-color: #8b8a8b;
+    color: #ccc;
+    height: 50px;
+}
 .input {
     background-color: rgb(224, 216, 216);
 }
@@ -99,9 +108,9 @@ textarea {
 .card {
     /* margin-right: 1rem; */
 
-    padding: 1rem;
+    padding: 0.1rem 0.5rem;
     flex-basis: 33.333333%;
-    opacity: 70%;
+    opacity: 90%;
     transition: opacity 0.2s;
     transition: all 0.2s ease-in-out;
     margin-bottom: 10px;
@@ -151,6 +160,61 @@ textarea {
 .addnote:hover {
     display: inline-block;
     animation: rotation 0.25s linear;
+}
+
+.icon {
+    display: inline-block;
+}
+
+.fade-in {
+    animation: fadeIn ease 5s;
+    -wbekit-animation:fadeIn ease 5s;
+    -moz-animation: fadeIn ease 5s;
+    -o-animation: fadeIn ease 5s;
+    -ms-animation: fadeIn ease 5s;
+}
+
+.note{
+    height: 150px;
+    background-color: blanchedalmond;
+    border-radius: 5px;
+    padding: 7px;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@-moz-keyframes fadeIn {
+    0% {
+        opacity: 0%;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@-o-keyframes fadeIn {
+    0% {
+        opacity: 0%
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@-ms-keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 
 @keyframes rotation {

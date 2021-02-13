@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import "./App.css";
+import { PlusSquareOutlined } from "@ant-design/icons";
 import Modal from "react-modal";
-import {PlusSquareOutlined, DeleteOutlined, EditOutlined} from '@ant-design/icons';
+import { UpdateNoteModal } from "./components/UpdateNoteModal";
+import { AddNoteModal } from "./components/AddNoteModal";
+import { Note } from "./components/Note";
 
 Modal.setAppElement("#root");
 
@@ -20,48 +23,30 @@ const testNotes = [
     },
 ];
 
-//This is a Component in ReactJs
-const Note = ({ text, isCompleted, id, backgroundColor, onNoteDelete, onNoteUpdate }) => {
-    const isDone = isCompleted ? "Yes" : "No";
-
-    return (
-        <div className="card" style= {{ backgroundColor }}>
-            <button type="submit" onClick={() => onNoteDelete(id)}>
-                <DeleteOutlined  className='icondelete'/>
-            </button>
-            <button type="submit" onClick={() => onNoteUpdate(id)}>
-                <EditOutlined />
-            </button>
-            <p className="note">
-                {text} isCompleted: {isDone} id: {id}
-            </p>
-        </div>
-    );
-};
-
 function App() {
     const [isOpen, setIsOpen] = useState(false);
+    const [isOpenUpdate, setIsOpenUpdate] = useState(false);
 
     function toggleModal() {
         setIsOpen(!isOpen);
     }
 
+    function toggleModalUpdate() {
+        setIsOpenUpdate(!isOpenUpdate);
+    }
+
     //This useState is responsible for rendering testNotes
     const [notes, setNote] = useState(testNotes);
+    const [currentlyUpdatedId, setCurrentlyUpdatedId] = useState(undefined);
 
     //This useState is responsible for adding notes
     const [text, setText] = useState("");
-
-    //This useState is responsible for getting the id of the note and re-rendering the new update
-    const [textUpdate, setTextUpdate] = useState("");
 
     //This useState is responsible for user choosing background color
     const [color, setColor] = useState("");
 
     const handleNoteDelete = (removeId) => {
         let updatedList;
-
-        // const idRemove = parseInt(textUpdate);
 
         const deleteNote = () => {
             updatedList = notes
@@ -89,108 +74,75 @@ function App() {
         setText("");
     };
 
-    const handleChangeUpdate = (e) => {
-        setTextUpdate(e.target.value);
-    };
-
     const handleColor = (e) => {
         setColor(e.target.value);
     };
 
     // Handles The Updating Of The Note Once An id is Submitted
-    const handleUpdateNote = () => {
-        let updatedList;
-
+    const handleUpdateNote = (text, id) => {
         const editNote = {
-            id: parseInt(textUpdate),
+            id,
             isCompleted: true,
-            text: text,
-            backgroundColor: color,
+            text,
+            // backgroundColor: color,
         };
 
-        const updateNote = (noteEdit) => {
-            updatedList = notes.map((note) => {
-                if (note.id === noteEdit.id) {
-                    return {
-                        ...note,
-                        ...noteEdit,
-                    };
-                }
-                return note;
-            });
-        };
+        const updatedList = notes.map((note) => {
+            if (note.id === editNote.id) {
+                return {
+                    ...note,
+                    ...editNote,
+                };
+            }
+            return note;
+        });
 
-        updateNote(editNote);
         setNote(updatedList);
+        toggleModalUpdate();
+        setCurrentlyUpdatedId(undefined);
     };
 
     return (
-        <div className="App">
-
-            <button onClick={toggleModal} className="addnote"><PlusSquareOutlined /></button>
-            <Modal
-                isOpen = {isOpen}
-                onRequestClose={toggleModal}
-                contentLabel = "Note App Dialog"
-                className = "modaldial"
-                overlayClassName = "overlaydial"
-                closeTimeoutMS = {500}
-            >
-                {/* <div className="center">
-                <label htmlFor="idNumber">Id</label>
-                <input
-                    className="input"
-                    id="idNumber"
-                    type="number"
-                    value={textUpdate}
-                    onChange={handleChangeUpdate}
+        <div>
+            <div className="header">
+                <h1>TO-DO LIST</h1>
+            </div>
+            <div className="App">
+                <button onClick={toggleModal} className="addnote">
+                    <PlusSquareOutlined />
+                </button>
+                <AddNoteModal
+                    isOpen={isOpen}
+                    onRequestClose={toggleModal}
+                    onClickAddNote={handleAddnote}
+                    handleColor={handleColor}
+                    toggleModal={toggleModal}
+                    text={text}
+                    color={color}
+                    handleChange={handleChange}
                 />
-            </div> */}
-                <div className="center">
-                    <label htmlFor="note">Note</label>
-                    <textarea
-                        className="input"
-                        id="textarea"
-                        type="text"
-                        value={text}
-                        onChange={handleChange}
-                    ></textarea>
-                </div>
-                <div>
-                    <button type="submit" onClick={handleAddnote}>
-                        Add Note
-                    </button>
-                    {/* <button type="submit" onClick={handleNoteDelete}>
-                    Delete Note
-                </button> */}
-                    <button type="submit" onClick={handleUpdateNote}>
-                        Edit Note
-                    </button>
-                </div>
-                <div>
-                    <select onChange={handleColor} value={color}>
-                        <option value="red">red</option>
-                        <option value="green">green</option>
-                        <option value="yellow">
-                            yellow
-                        </option>
-                        <option value="blue">blue</option>
-                        {/* {console.log(color)} */}
-                    </select>
-                </div>
-                <button onClick={toggleModal}>Close</button>
-            </Modal>
-
-            <div className="cardContainer">
-                {notes.map(({ id, ...note }) => (
-                    <Note
-                        key={id}
-                        id={id}
-                        onNoteDelete={handleNoteDelete}
-                        onNoteUpdate={handleUpdateNote}
-                        {...note}
+                {currentlyUpdatedId && (
+                    <UpdateNoteModal
+                        isOpen={isOpenUpdate}
+                        onClose={toggleModalUpdate}
+                        onNoteUpdateClick={(text) =>
+                            handleUpdateNote(text, currentlyUpdatedId)
+                        }
                     />
-                ))}
+                )}
+
+                <div className="cardContainer ">
+                    {notes.map(({ id, ...note }) => (
+                        <Note
+                            key={id}
+                            id={id}
+                            onNoteDelete={handleNoteDelete}
+                            onNoteUpdate={setCurrentlyUpdatedId}
+                            toggleModal={toggleModalUpdate}
+                            {...note}
+                        />
+                    ))}
+                </div>
             </div>
         </div>
     );
